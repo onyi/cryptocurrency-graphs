@@ -1,0 +1,25 @@
+{
+  "name": "cryptocurrency-graphs",
+  "version": "1.0.0",
+  "description": "Display graphs by using cryptocurrency data such as price or trade count",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onyi/cryptocurrency-graphs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onyi/cryptocurrency-graphs/issues"
+  },
+  "homepage": "https://github.com/onyi/cryptocurrency-graphs#readme",
+  "dependencies": {
+    "webpack": "^4.36.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.6"
+  }
+}
