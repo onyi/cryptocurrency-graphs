@@ -26,8 +26,13 @@ export const fetchData = (params) => {
           break;
         case "rows":
           param_arr.push(`&rows=${value}`);
+          break;
         case "type":
           link = url[value]
+          break;
+        case "timezone":
+          param_arr.push(`&timezone=${encodeURI(value)}`)
+          break;
         default:
           break;
       }
@@ -35,10 +40,11 @@ export const fetchData = (params) => {
 
 
     link += encodeURI(`&q=${q_arr.join(` AND `)}`);
-    link += encodeURI(`${Object.keys(param_arr).map( k => `&${k}=${param_arr[k]}`)}`);
+    console.log(`Params: ${param_arr}`)
+    link += encodeURI(param_arr.join(''));
   }
 
-  // console.log(`fetchBitcoin from ${link}`);
+  console.log(`fetch ${params.type} from ${link}`);
 
   return axios.get(link)
 

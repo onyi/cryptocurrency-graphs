@@ -1,15 +1,19 @@
 
 import * as d3 from "d3";
 
-
 export const generateGraph = (data, width = 960, height = 500, type) => {
   console.log("generateGraph");
   
   // var lineGenerator = d3.line()
   //   .curve(d3.curveCardinal);
 
+  d3.selectAll("#graph-content").remove(); //Forcefully clear all SVG element
+
+  let svg = d3.select("#graph-content-wrapper")
+    .append("svg")
+    .attr("id", "graph-content");
   let graphContent = document.getElementById("graph-content");
-  var svg = d3.select(graphContent);
+  // let svg = d3.select(graphContent);
 
   const margin = { top: 100, right: 70, bottom: 100, left: 70 };
 
@@ -20,7 +24,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let points = [];
   prices = data.map( (col) => {
     // console.log(`${JSON.stringfy(col.fields)}`)
-    return  parseInt(col.fields.priceusd)
+    return parseInt(col.fields.priceusd)
   })
 
   let date = data.map( col => {
@@ -81,15 +85,6 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let offsetMin = Math.floor(min / factor) * factor;
   let offsetMax = Math.ceil(max / factor) * factor;
 
-  let yAxisScale = d3.scaleLinear()
-    .domain([offsetMin, offsetMax])
-    .range([innerHeight, 0]);
-
-  let xAxisScale = d3.scaleTime()
-    .domain([minDate, maxDate])
-    .range([0, innerWidth]);
-
-
   console.log(`offsetMin ${offsetMin}\noffsetMax ${offsetMax}`);
 
   let xPathScale = d3.scaleTime()
@@ -109,8 +104,11 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   console.log(`Path Data: ${pathData}`);
 
-  let graphPath = document.getElementById("graph-path");
-  let path = d3.select(graphPath);
+  let path = svg.append("path")
+    .attr("id", "graph-path");
+  
+  // let graphPath = document.getElementById("graph-path");
+  // let path = d3.select(graphPath);
 
   path
     .attr('d', pathData)
@@ -140,6 +138,15 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   //   .domain( minDate, maxDate )
   //   .range([0, width - 100]);
 
+
+  let yAxisScale = d3.scaleLinear()
+    .domain([offsetMin, offsetMax])
+    .range([innerHeight, 0]);
+
+  let xAxisScale = d3.scaleTime()
+    .domain([minDate, maxDate])
+    .range([0, innerWidth]);
+
   // define the y axis
   let yAxis = d3.axisLeft()
     // .tickSize(-innerWidth)
@@ -147,19 +154,24 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   let xAxis = d3.axisBottom()
     // .tickSize(-innerHeight)
-    .scale(xAxisScale);
+    .scale(xAxisScale)
+    .tickFormat(d3.timeFormat("%m/%d/%y"))
+    .tickValues(date);
 
   svg.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(" + widthBegin + ", " + heightEnd + ")")
     .call(yAxis);
 
-  let xAxisTranslate = height - padding / 2;
-
   svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(" + widthBegin + "," + heightBegin + ")")
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-45)");
 
 
   // svg.data(

@@ -9,12 +9,29 @@
 </head>
 <body>
   <!-- <canvas ref="graphs" width="600" height="600"></canvas> -->
-  <div id="components"></div>
+
   <div id="graph-content-wrapper">
+    <div id="components">
+      <form id="component-form">
+        <input type="date" id="start-date" />
+        <input type="date" id="end-date" />
+        <input type="submit" value="Update" class="button" />
+      </form>
+      <button id="bitcoin" class="graph-button button">
+        <!-- <img  src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ethereum_logo_2014.svg/256px-Ethereum_logo_2014.svg.png" /> -->
+        Bitcoin
+      </button>
+      <button id="ethereum" class="graph-button button">
+        <!-- <img src="https://cdn2.iconfinder.com/data/icons/cryptocurrency-5/100/cryptocurrency_blockchain_crypto-01-512.png" /> -->
+        Ethereum
+      </button>
+      <button id="litecoin" class="graph-button button">
+        <!-- <img src="https://styles.redditmedia.com/t5_2szgd/styles/communityIcon_7p6m63yzb6101.png" /> -->
+        Litecoin
+      </button>
+    </div>
     <h3 id="graph-title"></h3>
-    <svg id="graph-content">
-      <path id="graph-path"></path>
-    </svg>
+
   </div>
 </body>
 </html>
