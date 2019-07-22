@@ -1,5 +1,7 @@
 ## Cryptocurrency Roller Coaster - Not your average Cryptocurrency Graph
 
+[Live](https://onyi.github.io/cryptocurrency-graphs/)
+
 ## Background and Overview
 
 `Cryptocurrency Roller Coaster` is a data visualization page that display cryptocurrencies price during configurable time period in a time-series graph. Then, the time-series graph would be the rail for a roller coaster cart to pass through. 
