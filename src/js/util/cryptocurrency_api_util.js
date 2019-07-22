@@ -1,5 +1,3 @@
-const dataType = require('../constants/data_types');
-const coinType = require('../constants/coin_types');
 const url = require('../constants/url');
 
 const axios = require('axios');
