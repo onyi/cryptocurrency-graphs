@@ -21,9 +21,9 @@ Users are able to set rail shape by changing graph time periood and types of dat
 
 ## Data and APIs
 
-(BitCoin)[https://public.opendatasoft.com/api/records/1.0/search/?dataset=bitcoin&sort=date&facet=date]
-(Litecoin)[https://public.opendatasoft.com/explore/embed/dataset/litecoin/table/?sort=date]
-(Etheurm)[https://public.opendatasoft.com/explore/embed/dataset/ethereum/table/?sort=date]
+[BitCoin](https://public.opendatasoft.com/api/records/1.0/search/?dataset=bitcoin&sort=date&facet=date)
+[Litecoin](https://public.opendatasoft.com/explore/embed/dataset/litecoin/table/?sort=date)
+[Etheurm](https://public.opendatasoft.com/explore/embed/dataset/ethereum/table/?sort=date)
 
 
 

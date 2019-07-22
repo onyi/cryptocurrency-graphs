@@ -21,7 +21,8 @@ class Graph {
     
 
     // this.createComponents = this.createComponents.bind(this);
-    this.createComponents();
+    // this.createComponents();
+    this.render();
   }
 
   clear(){ //clear graph and its child content
@@ -32,7 +33,8 @@ class Graph {
     e.preventDefault();
     let type = e.currentTarget.id
     this.params.type = type;
-    this.render();
+    this.createComponents();
+    // this.render();
   }
 
   createComponents(){
@@ -62,7 +64,6 @@ class Graph {
     let graphButtons = document.getElementsByClassName("graph-button");
      
     for(let i = 0; i < graphButtons.length; i++ ){
-      let that = this;
       let button = graphButtons[i];
       button.onclick = (e) => this.updateGraphType(e);
       
