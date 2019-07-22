@@ -4,8 +4,7 @@ import * as d3 from "d3";
 const moment = require('moment');
 
 export const generateGraph = (data, width = 960, height = 500, type) => {
-  console.log("generateGraph");
-  
+
   // var lineGenerator = d3.line()
   //   .curve(d3.curveCardinal);
 
@@ -59,12 +58,12 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let offsetWidth = width - padding * 2;
   let offsetHeight = height - padding * 2;
 
-  console.log(`prices: ${prices}; \n Min: ${min} \n Max: ${max}`);
+  // console.log(`prices: ${prices}; \n Min: ${min} \n Max: ${max}`);
 
   let minDate = date[date.length - 1];
   let maxDate = date[0];
 
-  console.log(`date: ${JSON.stringify(date)}; \n Min: ${minDate}; \n Max: ${maxDate}`);
+  // console.log(`date: ${JSON.stringify(date)}; \n Min: ${minDate}; \n Max: ${maxDate}`);
   
   // points = prices.map( (val, idx) => {
   //   // return [ width / size * idx, (val - min) / diff * height ]
@@ -80,14 +79,15 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
       y: col.fields.priceusd
     }
   })
+  .reverse();
 
-  console.log(`points: ${JSON.stringify(points)}`);
+  // console.log(`points: ${JSON.stringify(points)}`);
 
   let factor = min > 1000 ? 1000 : 100;
   let offsetMin = Math.floor(min / factor) * factor;
   let offsetMax = Math.ceil(max / factor) * factor;
 
-  console.log(`offsetMin ${offsetMin}\noffsetMax ${offsetMax}`);
+  // console.log(`offsetMin ${offsetMin}\noffsetMax ${offsetMax}`);
 
   let parseDate = d3.timeFormat("%m/%d/%y");
 
@@ -142,7 +142,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   var pathData = lineGenerator(points);
 
-  console.log(`Path Data: ${pathData}`);
+  // console.log(`Path Data: ${pathData}`);
 
   let path = svg.append("path")
     .attr("id", "graph-path");
@@ -152,9 +152,6 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   path
     .attr('d', pathData)
-    .transition()
-    .duration(4000)
-    .ease(d3.easeLinear)
     // .attr("stroke-width", 3)
     // .attr("stroke", "#777")
     // .attr("fill", "none");
@@ -180,7 +177,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   g.selectAll("circle")
     .on("mouseover", (d) =>  {
       infoTooltipsDiv.transition().duration(200).style("opacity", 0.8);
-      console.log(d);
+      // console.log(d);
       infoTooltipsDiv.html(
         "<span>Date: " + moment(d.x).format('YYYY-MM-DD') + "</span>" 
         + "<br/>" 
@@ -200,7 +197,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
     svg.selectAll("#roller-coaster-path").remove();
 
     let rcPath = svg.append("path")
-      .attr("d", lineGenerator(points.reverse()))
+      .attr("d", lineGenerator(points))
       .attr("id", "roller-coaster-path")
       .attr("stroke", "darkgrey")
       .attr("stroke-width", "2")
@@ -214,13 +211,66 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
       .attr("stroke-dashoffset", totalLength)
       .transition()
       .duration(8000)
-      .ease(d3.easeLinear)
+      .ease(d3.easeSinInOut)
       .attr("stroke-dashoffset", 0)
-      .on("end", repeat);
+      // .on("end", repeat);
   };
   repeat();
 
+  let cartShapeGroup = svg.append("g");
+
+  cartShapeGroup.append("circle")
+    .attr("r", 3)
+    .attr("fill", "white")
+    .attr("stroke", "#000")
+    .attr("transform", "translate(0, -10)");
+
+  cartShapeGroup.append("circle")
+    .attr("r", 3)
+    .attr("fill", "white")
+    .attr("stroke", "#000")
+    .attr("transform", "translate(-10, -10)");
+
+  cartShapeGroup.append("rect")
+    .attr("width", "20")
+    .attr("height", "10")
+    .attr("fill", "blue")
+    .attr("stroke", "#000")
+    .attr("transform", "translate(-15, -25)");
+
   
+
+
+  let direction = -1,
+    atLength;
+
+  let cartTransition = () => {
+    direction *= -1;
+    cartShapeGroup.transition()
+      .duration(8000)
+      .attrTween("transform", translateAlong(path.node()))
+      .ease(d3.easeSin)
+      // .each("end", cartTransition);
+  }
+
+  function translateAlong(path) {
+    let l = path.getTotalLength();
+    return function (d, i, a) {
+      // console.log(`d: ${d}\ni:${i};\na:${a}`);
+      return function (t) {
+        // console.log(`t: ${t}\nl:${l}`);
+        atLength = direction === 1 ? (t * l) : (l - (t * l));
+        let p1 = path.getPointAtLength(atLength),
+            p2 = path.getPointAtLength((atLength) + direction),
+            angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+        return "translate(" + p1.x + "," + p1.y + ")rotate(" + angle + ")";
+      }
+    }
+  }
+
+  cartTransition();
+
+
 
 
 }
