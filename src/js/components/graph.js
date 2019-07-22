@@ -48,14 +48,14 @@ class Graph {
     document.getElementById("component-form").onsubmit = (e) => {
       e.stopPropagation();
       e.preventDefault();
-      console.log(`Submit form`);
+      // console.log(`Submit form`);
       // console.log(`${document.getElementById("row-count").value}`)
       // this.params.rowCount = document.getElementById("row-count").value;
       this.params.startDate = document.getElementById("start-date").value;
       this.params.endDate = document.getElementById("end-date").value;
       
       this.params.rows = moment(this.params.endDate).diff(moment(this.params.startDate), 'days');
-      console.log(`this.params.rows : ${this.params.rows }`)
+      // console.log(`this.params.rows : ${this.params.rows }`)
       this.render();
     }
 
