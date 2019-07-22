@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch --mode=development",
     "postinstall": "webpack",
-    "build": "webpack"s
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
