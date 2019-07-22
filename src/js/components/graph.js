@@ -62,6 +62,7 @@ class Graph {
     let graphButtons = document.getElementsByClassName("graph-button");
      
     for(let i = 0; i < graphButtons.length; i++ ){
+      let that = this;
       let button = graphButtons[i];
       button.onclick = (e) => this.updateGraphType(e);
       
