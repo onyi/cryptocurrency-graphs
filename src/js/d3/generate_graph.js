@@ -1,6 +1,8 @@
 
 import * as d3 from "d3";
 
+const moment = require('moment');
+
 export const generateGraph = (data, width = 960, height = 500, type) => {
   console.log("generateGraph");
   
@@ -87,6 +89,44 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   console.log(`offsetMin ${offsetMin}\noffsetMax ${offsetMax}`);
 
+  let parseDate = d3.timeFormat("%m/%d/%y");
+
+  //Generate X and Y Axis
+  let yAxisScale = d3.scaleLinear()
+    .domain([offsetMin, offsetMax])
+    .range([innerHeight, 0]);
+
+  let xAxisScale = d3.scaleTime()
+    .domain([minDate, maxDate])
+    .range([0, innerWidth]);
+
+  // define the y axis
+  let yAxis = d3.axisLeft()
+    // .tickSize(-innerWidth)
+    .scale(yAxisScale);
+
+  let xAxis = d3.axisBottom()
+    // .tickSize(-innerHeight)
+    .scale(xAxisScale)
+    .tickFormat(parseDate)
+    .tickValues(date);
+
+  svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + widthBegin + ", " + heightEnd + ")")
+    .call(yAxis);
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(" + widthBegin + "," + heightBegin + ")")
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-45)");
+
+
   let xPathScale = d3.scaleTime()
     .domain([minDate, maxDate])
     .range([widthBegin, widthEnd]);
@@ -106,77 +146,79 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
 
   let path = svg.append("path")
     .attr("id", "graph-path");
-  
+
   // let graphPath = document.getElementById("graph-path");
   // let path = d3.select(graphPath);
 
   path
     .attr('d', pathData)
+    .transition()
+    .duration(4000)
+    .ease(d3.easeLinear)
     // .attr("stroke-width", 3)
     // .attr("stroke", "#777")
     // .attr("fill", "none");
 
-  // Also draw points for reference
+  // Draw points for reference
+  let g = svg.selectAll()
+    .data(points).enter().append("g");
 
-  // TODO: how to add point for X when data is DateTime?
-  // svg
-  //   .selectAll('circle')
-  //   .data(points)
-  //   .enter()
-  //   .append('circle')
-  //   .attr('cx', function (d) {
-  //     return d.x;
-  //   })
-  //   .attr('cy', function (d) {
-  //     return d.y;
-  //   })
-  //   .attr('r', 3)
+  g.append('circle')
+    .attr('cx', function (d) {
+      return xPathScale(d.x)
+    })
+    .attr('cy', function (d) {
+      return yPathScale(d.y);
+    })
+    .attr('r', 2);
 
+  let infoTooltipsDiv = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .attr("id", "info-tooltips-div")
+    .style("opacity", 0);
 
-  // let xAxisScale = d3.scaleLinear()
-  //   // .domain([new Date(date[size-1]), new Date(date[0])])
-  //   .domain( minDate, maxDate )
-  //   .range([0, width - 100]);
+  g.selectAll("circle")
+    .on("mouseover", (d) =>  {
+      infoTooltipsDiv.transition().duration(200).style("opacity", 0.8);
+      console.log(d);
+      infoTooltipsDiv.html(
+        "<span>Date: " + moment(d.x).format('YYYY-MM-DD') + "</span>" 
+        + "<br/>" 
+        + "<span>Price: " + parseFloat(d.y).toFixed(2) + "</span>"
+      )
+      .style("left", (d3.event.pageX - 20) + "px")
+      .style("top", (d3.event.pageY + 6) + "px");
 
+    })
+    .on("mouseout", (d) => {
+      infoTooltipsDiv.transition().duration(500).style("opacity", 0);
 
-  let yAxisScale = d3.scaleLinear()
-    .domain([offsetMin, offsetMax])
-    .range([innerHeight, 0]);
-
-  let xAxisScale = d3.scaleTime()
-    .domain([minDate, maxDate])
-    .range([0, innerWidth]);
-
-  // define the y axis
-  let yAxis = d3.axisLeft()
-    // .tickSize(-innerWidth)
-    .scale(yAxisScale);
-
-  let xAxis = d3.axisBottom()
-    // .tickSize(-innerHeight)
-    .scale(xAxisScale)
-    .tickFormat(d3.timeFormat("%m/%d/%y"))
-    .tickValues(date);
-
-  svg.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(" + widthBegin + ", " + heightEnd + ")")
-    .call(yAxis);
-
-  svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(" + widthBegin + "," + heightBegin + ")")
-    .call(xAxis)
-    .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("dx", "-.8em")
-    .attr("dy", ".15em")
-    .attr("transform", "rotate(-45)");
+    })
 
 
-  // svg.data(
-  //   { name: 'curveBasis', curve: d3.curveBasis, active: true, lineString: '', clear: true, info: 'Interpolates the start and end points and approximates the inner points using a B-spline.' }
-  // )
+  let repeat = () => {
+    svg.selectAll("#roller-coaster-path").remove();
+
+    let rcPath = svg.append("path")
+      .attr("d", lineGenerator(points.reverse()))
+      .attr("id", "roller-coaster-path")
+      .attr("stroke", "darkgrey")
+      .attr("stroke-width", "2")
+      .attr("fill", "none")
+      .attr("transform", "translate(0, -10)");
+
+    let totalLength = rcPath.node().getTotalLength();
+
+    rcPath
+      .attr("stroke-dasharray", totalLength + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength)
+      .transition()
+      .duration(8000)
+      .ease(d3.easeLinear)
+      .attr("stroke-dashoffset", 0)
+      .on("end", repeat);
+  };
+  repeat();
 
   
 
