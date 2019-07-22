@@ -49296,24 +49296,10 @@ var app = __webpack_require__(/*! ./js/app */ "./src/js/app.js");
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var _constants_coin_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants/coin_types */ "./src/js/constants/coin_types.js");
-/* harmony import */ var _constants_coin_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_constants_coin_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _d3_generate_graph__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./d3/generate_graph */ "./src/js/d3/generate_graph.js");
-/* harmony import */ var _components_graph__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/graph */ "./src/js/components/graph.js");
-
-
-
+/* harmony import */ var _components_graph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/graph */ "./src/js/components/graph.js");
 
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('Hello World');
-  var params = {
-    'startDate': '2019/05/01',
-    'endDate': '2019/07/04',
-    'rows': 20,
-    "type": _constants_coin_types__WEBPACK_IMPORTED_MODULE_1___default.a.ethereum
-  };
-  var graph = new _components_graph__WEBPACK_IMPORTED_MODULE_3__["default"](); // graph.render();
+  var graph = new _components_graph__WEBPACK_IMPORTED_MODULE_0__["default"]();
 });
 
 /***/ }),
@@ -49357,9 +49343,10 @@ function () {
       rows: 10,
       type: _constants_coin_types__WEBPACK_IMPORTED_MODULE_2___default.a.ethereum,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // this.createComponents = this.createComponents.bind(this);
+      // this.createComponents();
 
     };
-    this.createComponents();
+    this.render();
   }
 
   _createClass(Graph, [{
@@ -49372,7 +49359,7 @@ function () {
       e.preventDefault();
       var type = e.currentTarget.id;
       this.params.type = type;
-      this.render();
+      this.createComponents(); // this.render();
     }
   }, {
     key: "createComponents",
@@ -49402,7 +49389,6 @@ function () {
       var graphButtons = document.getElementsByClassName("graph-button");
 
       for (var i = 0; i < graphButtons.length; i++) {
-        var that = this;
         var button = graphButtons[i];
 
         button.onclick = function (e) {
