@@ -18,8 +18,8 @@ Users are able to set rail shape by changing graph time periood and types of dat
 
 * Vanilla JavaScript with Ajax to handles API request to fetch Cryptocurrency data
 * D3.js for graphs
-* HTML5 Canvas for graphic rendering
 * Webpack to bundle things up
+* Npm to manage dependencies
 
 ## Data and APIs
 
@@ -27,27 +27,7 @@ Users are able to set rail shape by changing graph time periood and types of dat
 [Litecoin](https://public.opendatasoft.com/explore/embed/dataset/litecoin/table/?sort=date)
 [Etheurm](https://public.opendatasoft.com/explore/embed/dataset/ethereum/table/?sort=date)
 
+## Future Implementation
 
-
-## Implementation Timeline
-
-#### Day 1: 
-
-Research for ideas, and create project skeleton
-
-#### Day 2: 
-
-Show time-series graph using D3.js
-
-#### Day 3: 
-
-Add buttons to adjust graph data based on user input
-
-#### Day 4: 
-
-Research for animation with D3 graphs
-Add roller coaster cart on top of D3 graphs, and add animations
-
-#### Day 5: 
-
-Production README, and polish things up
+* User controllable roller coaster cart
+* Better transitioning when data updated
