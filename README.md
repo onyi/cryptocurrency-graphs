@@ -16,7 +16,7 @@ Users are able to set rail shape by changing graph time periood and types of dat
 
 ## Architecture and Technologies
 
-* Vanilla JavaScript with Ajax to handles API request to fetch Cryptocurrency data
+* Vanilla JavaScript with Axios library to handles API request to fetch Cryptocurrency data
 * D3.js for graphs
 * Webpack to bundle things up
 * Npm to manage dependencies
@@ -31,3 +31,4 @@ Users are able to set rail shape by changing graph time periood and types of dat
 
 * User controllable roller coaster cart
 * Better transitioning when data updated
+* Cart moving speed changes by curve going uphill or downhill
