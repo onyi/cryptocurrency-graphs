@@ -5,7 +5,7 @@ import { generateGraph } from '../d3/generate_graph';
 
 import coinType from '../constants/coin_types';
 
-const moment = require('moment');
+import * as moment from 'moment';
 
 import * as Lightpick from 'lightpick';
 
