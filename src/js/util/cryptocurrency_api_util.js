@@ -13,7 +13,7 @@ export const fetchData = (params) => {
     Object.keys(params).forEach( key => {
       let value = params[key];
 
-      console.log(`Key: ${key}, value: ${value}, param_arr: ${param_arr}, q_arr: ${q_arr}`);
+      // console.log(`Key: ${key}, value: ${value}, param_arr: ${param_arr}, q_arr: ${q_arr}`);
 
       switch(key){
         case "startDate":

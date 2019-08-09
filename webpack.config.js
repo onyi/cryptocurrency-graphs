@@ -14,7 +14,7 @@ module.exports = {
       path.resolve(__dirname, "src")
     ],
     // directories where to look for modules
-    extensions: [".js", ".json", ".jsx", ".scss",],
+    extensions: [".js", ".json", ".jsx", ".scss", ".css"],
     // extensions that are used
   },
   devtool: "source-map", // enum
