@@ -45,6 +45,8 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let size = prices.length;
   let diff = max - min;
 
+  let animationTime = 8000;
+
   width = graphContent.clientWidth;
   height = graphContent.clientHeight;
 
@@ -210,7 +212,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
       .attr("stroke-dasharray", totalLength + " " + totalLength)
       .attr("stroke-dashoffset", totalLength)
       .transition()
-      .duration(8000)
+      .duration(animationTime)
       .ease(d3.easeSinInOut)
       .attr("stroke-dashoffset", 0)
       // .on("end", repeat);
@@ -247,7 +249,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let cartTransition = () => {
     direction *= -1;
     cartShapeGroup.transition()
-      .duration(8000)
+      .duration(animationTime)
       .attrTween("transform", translateAlong(path.node()))
       .ease(d3.easeSin)
       // .each("end", cartTransition);
