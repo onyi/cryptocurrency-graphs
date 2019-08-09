@@ -7,6 +7,8 @@ import coinType from '../constants/coin_types';
 
 const moment = require('moment');
 
+import * as Lightpick from 'lightpick';
+
 class Graph {
   constructor(){
     // this.type = type;
@@ -19,9 +21,24 @@ class Graph {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     }
     
+    var picker = new Lightpick({
+      field: document.getElementById('datepicker'),
+      singleDate: false,
+      minDays: 10,
+      maxDate: new Date(),
+      format: "YYYY-MM-DD",
+      onSelect: (start, end) => {
+        var str = '';
+        str += start ? start.format('YYYY-MM-DD') + ' to ' : '';
+        str += end ? end.format('YYYY-MM-DD') : '...';
+        console.log(`Start: ${start}; End: ${end}; String: ${str}`);
+        // document.getElementById('result-2').innerHTML = str;
+        if (start) this.params.startDate = start.format('YYYY-MM-DD');
+        if(end) this.params.endDate = end.format('YYYY-MM-DD');
+      }
+    });
+    picker.setDateRange(this.params.startDate, this.params.endDate);
 
-    // this.createComponents = this.createComponents.bind(this);
-    // this.createComponents();
     this.render();
   }
 
@@ -38,14 +55,6 @@ class Graph {
   }
 
   createComponents(){
-    // let form = document.createElement('form');
-    // form.setAttribute("id", "component-form");
-    // let rowCount = document.createElement('input');
-    // rowCount.setAttribute("class","row-count");
-    // rowCount.setAttribute("id", "row-count");
-    // let components = document.getElementById("components");
-    // components.appendChild(rowCount);
-
 
     document.getElementById("component-form").onsubmit = (e) => {
       e.stopPropagation();
@@ -53,9 +62,7 @@ class Graph {
       // console.log(`Submit form`);
       // console.log(`${document.getElementById("row-count").value}`)
       // this.params.rowCount = document.getElementById("row-count").value;
-      this.params.startDate = document.getElementById("start-date").value;
-      this.params.endDate = document.getElementById("end-date").value;
-      
+     
       this.params.rows = moment(this.params.endDate).diff(moment(this.params.startDate), 'days');
       // console.log(`this.params.rows : ${this.params.rows }`)
       this.render();
@@ -76,8 +83,6 @@ class Graph {
     }
 
     // document.getElementById("row-count").value = this.params.rows;
-    document.getElementById("start-date").value = this.params.startDate;
-    document.getElementById("end-date").value = this.params.endDate;
 
   }
 
