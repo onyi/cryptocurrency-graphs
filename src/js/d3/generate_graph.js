@@ -1,7 +1,7 @@
 
 import * as d3 from "d3";
 
-const moment = require('moment');
+import * as moment from 'moment';
 
 export const generateGraph = (data, width = 960, height = 500, type) => {
 
@@ -28,6 +28,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
     return parseInt(col.fields.priceusd)
   })
 
+  //Creating X axis data
   let date = data.map( col => {
     return new Date(col.fields.date);
   });
@@ -45,6 +46,8 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let size = prices.length;
   let diff = max - min;
 
+  let animationTime = 8000;
+  
   width = graphContent.clientWidth;
   height = graphContent.clientHeight;
 
@@ -73,6 +76,8 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   //   }
   // })
 
+
+
   points = data.map( (col, idx) => {
     return { 
       x: new Date(col.fields.date),
@@ -80,6 +85,23 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
     }
   })
   .reverse();
+
+  // Reduce data if exceed 30
+  let maxSize = 30;
+  let iterator = Math.floor(size / maxSize) + 1;
+  if (iterator > 1) {
+    console.log(`Reducer logic starts, points: ${points.length}`);
+
+    let newPoints = [];
+    let newDates = [];
+    for(let i = 0; i < points.length; i += iterator){
+      newPoints.push(points[i]);
+      newDates.push(date[i]);
+    }
+    points = newPoints;
+    date = newDates;
+    console.log(`Reducer logic Ended, points: ${points.length}`);
+  }
 
   // console.log(`points: ${JSON.stringify(points)}`);
 
@@ -210,7 +232,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
       .attr("stroke-dasharray", totalLength + " " + totalLength)
       .attr("stroke-dashoffset", totalLength)
       .transition()
-      .duration(8000)
+      .duration(animationTime)
       .ease(d3.easeSinInOut)
       .attr("stroke-dashoffset", 0)
       // .on("end", repeat);
@@ -247,7 +269,7 @@ export const generateGraph = (data, width = 960, height = 500, type) => {
   let cartTransition = () => {
     direction *= -1;
     cartShapeGroup.transition()
-      .duration(8000)
+      .duration(animationTime)
       .attrTween("transform", translateAlong(path.node()))
       .ease(d3.easeSin)
       // .each("end", cartTransition);

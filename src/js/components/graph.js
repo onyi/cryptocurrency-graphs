@@ -5,7 +5,7 @@ import { generateGraph } from '../d3/generate_graph';
 
 import coinType from '../constants/coin_types';
 
-const moment = require('moment');
+import * as moment from 'moment';
 
 import * as Lightpick from 'lightpick';
 
@@ -28,16 +28,17 @@ class Graph {
       maxDate: new Date(),
       format: "YYYY-MM-DD",
       onSelect: (start, end) => {
-        var str = '';
-        str += start ? start.format('YYYY-MM-DD') + ' to ' : '';
-        str += end ? end.format('YYYY-MM-DD') : '...';
-        console.log(`Start: ${start}; End: ${end}; String: ${str}`);
-        // document.getElementById('result-2').innerHTML = str;
+        // var str = '';
+        // str += start ? start.format('YYYY-MM-DD') + ' to ' : '';
+        // str += end ? end.format('YYYY-MM-DD') : '...';
+        // console.log(`Start: ${start}; End: ${end}; String: ${str}`);
         if (start) this.params.startDate = start.format('YYYY-MM-DD');
         if(end) this.params.endDate = end.format('YYYY-MM-DD');
       }
     });
     picker.setDateRange(this.params.startDate, this.params.endDate);
+
+    document.getElementById("graph-title").innerText = this.params.type;
 
     this.render();
   }
@@ -81,6 +82,9 @@ class Graph {
         button.classList.add("selected")
       }
     }
+
+    document.getElementById("graph-title").innerText = this.params.type;
+
 
     // document.getElementById("row-count").value = this.params.rows;
 
